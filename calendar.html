@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planix - Calendar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css">
+    <style>
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: var(--glass-bg);
+            border-radius: var(--card-radius);
+            box-shadow: var(--glass-shadow);
+            border: 1px solid var(--glass-border);
+        }
+
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .calendar-nav button {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .calendar-nav button:hover {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        #current-month {
+            font-size: 1.5rem;
+            font-weight: 700;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: var(--glass-border);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .calendar-day-header {
+            background: var(--glass-bg);
+            padding: 1rem 0;
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .calendar-day {
+            background: var(--bg-color);
+            min-height: 120px;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            transition: background-color 0.2s;
+        }
+
+        [data-theme="dark"] .calendar-day {
+            background: #1e293b;
+        }
+
+        .calendar-day:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        
+        [data-theme="dark"] .calendar-day:hover {
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        .calendar-day.empty {
+            background: rgba(0,0,0,0.02);
+        }
+        
+        [data-theme="dark"] .calendar-day.empty {
+            background: rgba(0,0,0,0.2);
+        }
+
+        .day-number {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            align-self: flex-end;
+        }
+
+        .day-number.today {
+            background: var(--accent-color);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar-task {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .calendar-task:hover {
+            transform: scale(1.02);
+            z-index: 10;
+        }
+
+        .calendar-task.high { background: var(--danger-color); }
+        .calendar-task.medium { background: var(--warning-color); }
+        .calendar-task.low { background: var(--success-color); }
+
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Planix</h2>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="/dashboard.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                    Dashboard
+                </a></li>
+                <li><a href="/calendar.html" class="nav-item active">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    Calendar
+                </a></li>
+                <li><a href="/planner.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    Auto Planner
+                </a></li>
+                <li><a href="/search.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    Search
+                </a></li>
+                <li><a href="/analysis.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    Analysis
+                </a></li>
+                <li><a href="/focus.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    Focus Timer
+                </a></li>
+                <li><a href="/profile.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    Profile
+                </a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="theme-toggle-wrapper nav-item">
+                    <span>Theme</span>
+                    <button id="theme-toggle" class="btn-icon" aria-label="Toggle theme"></button>
+                </div>
+                <button id="logout-btn" class="nav-item btn-icon" style="justify-content: flex-start; width: 100%; border-radius: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header animate-fade-in">
+                <div>
+                    <h1 class="page-title">Calendar View</h1>
+                    <p>Visualize deadlines across the month.</p>
+                </div>
+            </header>
+
+            <div class="calendar-container animate-fade-in" style="animation-delay: 0.1s;">
+                <div class="calendar-header">
+                    <div class="calendar-nav">
+                        <button id="prev-month">&larr; Prev</button>
+                    </div>
+                    <div id="current-month">September 2023</div>
+                    <div class="calendar-nav">
+                        <button id="next-month">Next &rarr;</button>
+                        <button id="today-btn">Today</button>
+                    </div>
+                </div>
+
+                <div class="calendar-grid" id="calendar-grid">
+                    <!-- Javascript will render days -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Daily Planner Modal -->
+    <div id="day-planner-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px);">
+        <div class="glass-panel" style="width: 100%; max-width: 450px; padding: 1.5rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; max-height: 80vh;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 id="planner-date-title" style="margin: 0; font-size: 1.25rem; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    Daily Schedule
+                </h3>
+                <button id="close-day-planner" class="btn-icon" style="padding: 4px; font-size: 1.2rem; line-height: 1;">&times;</button>
+            </div>
+            
+            <div id="day-planner-timeline" style="flex: 1; overflow-y: auto; padding-right: 8px; margin-top: 10px;">
+                <!-- Timeline items populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/calendar.js"></script>
+</body>
+</html>

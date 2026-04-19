@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planix - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css">
+    <style>
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                width: 200px;
+                position: fixed;
+                transform: translateX(-100%);
+                z-index: 100;
+                transition: transform 0.3s;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+
+        .task-form-panel {
+            position: sticky;
+            top: 2rem;
+            padding: 1.5rem;
+        }
+
+        .tasks-list-panel {
+            padding: 1.5rem;
+        }
+
+        .task-item {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        [data-theme="dark"] .task-item {
+            background: rgba(15, 23, 42, 0.4);
+        }
+
+        .task-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .task-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .task-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .time-remaining {
+            color: var(--warning-color);
+            font-weight: 600;
+        }
+        
+        .time-overdue {
+            color: var(--danger-color);
+            font-weight: 700;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Planix</h2>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="/dashboard.html" class="nav-item active">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                    Dashboard
+                </a></li>
+                <li><a href="/calendar.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    Calendar
+                </a></li>
+                <li><a href="/planner.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    Auto Planner
+                </a></li>
+                <li><a href="/search.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    Search
+                </a></li>
+                <li><a href="/analysis.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    Analysis
+                </a></li>
+                <li><a href="/focus.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    Focus Timer
+                </a></li>
+                <li><a href="/profile.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    Profile
+                </a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="theme-toggle-wrapper nav-item">
+                    <span>Theme</span>
+                    <button id="theme-toggle" class="btn-icon" aria-label="Toggle theme"></button>
+                </div>
+                <button id="logout-btn" class="nav-item btn-icon" style="justify-content: flex-start; width: 100%; border-radius: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header animate-fade-in">
+                <div>
+                    <h1 class="page-title">Task Dashboard</h1>
+                    <p>Welcome back, <span id="user-greeting-name" style="color: var(--accent-color); font-weight: 600;">User</span>! Manage and track your priorities efficiently.</p>
+                </div>
+            </header>
+            
+            <!-- Mood Selector -->
+            <div class="glass-panel animate-fade-in" style="animation-delay: 0.15s; margin-bottom: 2rem; padding: 1.5rem;">
+                <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                    How are you feeling right now?
+                </h3>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn-icon mood-btn" data-mood="energetic" style="border-radius: 8px; padding: 0.5rem 1rem; background: rgba(16, 185, 129, 0.1); color: var(--success-color); border: 1px solid rgba(16, 185, 129, 0.2); font-weight: 600;">⚡ Energetic</button>
+                    <button class="btn-icon mood-btn" data-mood="focused" style="border-radius: 8px; padding: 0.5rem 1rem; background: rgba(6, 182, 212, 0.1); color: var(--accent-color); border: 1px solid rgba(6, 182, 212, 0.2); font-weight: 600;">🧠 Focused</button>
+                    <button class="btn-icon mood-btn" data-mood="stressed" style="border-radius: 8px; padding: 0.5rem 1rem; background: rgba(239, 68, 68, 0.1); color: var(--danger-color); border: 1px solid rgba(239, 68, 68, 0.2); font-weight: 600;">😮‍💨 Stressed</button>
+                    <button class="btn-icon mood-btn" data-mood="tired" style="border-radius: 8px; padding: 0.5rem 1rem; background: rgba(245, 158, 11, 0.1); color: var(--warning-color); border: 1px solid rgba(245, 158, 11, 0.2); font-weight: 600;">🔋 Tired</button>
+                </div>
+                <div id="mood-suggestion-box" style="display: none; margin-top: 1.5rem; padding: 1rem; border-radius: 8px; border-left: 4px solid var(--accent-color);">
+                    <div id="mood-suggestion-text" style="font-size: 0.95rem; font-weight: 500; color: var(--text-primary); line-height: 1.5;"></div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Add Task Form -->
+                <div class="glass-panel task-form-panel animate-fade-in" style="animation-delay: 0.1s;">
+                    <h3 style="margin-bottom: 1.5rem; font-size: 1.25rem;">Assign New Task</h3>
+                    <form id="add-task-form">
+                        <div class="form-group">
+                            <label for="task-title">Title</label>
+                            <input type="text" id="task-title" class="form-control" required placeholder="e.g. Q3 Report">
+                        </div>
+                        <div class="form-group">
+                            <label for="task-desc">Description</label>
+                            <textarea id="task-desc" class="form-control" rows="3" placeholder="Brief details about the task..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-priority">Priority</label>
+                            <select id="task-priority" class="form-control" required>
+                                <option value="high">High Priority</option>
+                                <option value="medium" selected>Medium Priority</option>
+                                <option value="low">Low Priority</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-difficulty">Difficulty</label>
+                            <select id="task-difficulty" class="form-control" required>
+                                <option value="hard">Hard Task</option>
+                                <option value="easy" selected>Easy Task</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-recurring">Recurring</label>
+                            <select id="task-recurring" class="form-control" required>
+                                <option value="none" selected>None</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-deadline">Deadline</label>
+                            <input type="datetime-local" id="task-deadline" class="form-control" required>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                            <button type="submit" id="submit-task-btn" class="btn-primary" style="flex: 1;">Add Task</button>
+                            <button type="button" id="cancel-edit-btn" class="btn-primary" style="flex: 1; display: none; background: var(--glass-border); color: var(--text-primary); border-color: transparent;">Cancel Edit</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- View Tasks List -->
+                <div class="glass-panel tasks-list-panel animate-fade-in" style="animation-delay: 0.2s;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <!-- Tabs -->
+                            <div class="task-tabs" style="display: flex; gap: 0.5rem;">
+                                <button id="tab-pending" class="btn-icon" style="padding: 0.5rem 1rem; border-radius: 99px; font-weight: 600; font-size: 0.95rem; background: var(--text-primary); color: var(--bg-color);">Pending Works</button>
+                                <button id="tab-completed" class="btn-icon" style="padding: 0.5rem 1rem; border-radius: 99px; font-weight: 600; font-size: 0.95rem;">Completed Works</button>
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; justify-content: center; gap: 0.5rem;">
+                            <div style="display:flex; align-items:center; gap:0.5rem;">
+                                <span style="font-size: 0.8rem; font-weight:600; color:var(--text-secondary); text-transform:uppercase;">Cognitive Load:</span>
+                                <span id="cognitive-load-badge" style="padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; background: var(--success-color); color: #fff;">Low</span>
+                            </div>
+                            <span id="task-count" style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.25rem;"></span>
+                        </div>
+                    </div>
+
+                    <!-- AI Advisor Banner -->
+                    <div id="ai-advisor-banner" style="display: none; background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(168, 85, 247, 0.1)); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; flex-direction: column; gap: 0.5rem;">
+                        <div style="display: flex; align-items: center; gap: 8px; color: #8b5cf6; font-weight: 600;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"></path><path d="M12 18v4"></path><path d="M4.93 4.93l2.83 2.83"></path><path d="M16.24 16.24l2.83 2.83"></path><path d="M2 12h4"></path><path d="M18 12h4"></path><path d="M4.93 19.07l2.83-2.83"></path><path d="M16.24 7.76l2.83-2.83"></path></svg>
+                            Intelligent Task Advisor
+                        </div>
+                        <div id="ai-advisor-text" style="font-size: 0.95rem; color: var(--text-primary);"></div>
+                    </div>
+                    
+                    <div id="tasks-container">
+                        <!-- Tasks will be rendered here by JS -->
+                        <div class="empty-state">
+                            Loading tasks...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification-container" class="notification-container"></div>
+
+    <script type="module" src="/src/dashboard.js"></script>
+</body>
+</html>

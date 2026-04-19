@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planix - The Intelligent Task Priority System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css">
+    <style>
+        body {
+            display: block;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: #000;
+        }
+
+        .welcome-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .welcome-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .main-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem 1rem;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: 5rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff, #06b6d4, #14b8a6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse-glow 3s infinite alternate;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 3rem auto;
+            line-height: 1.6;
+        }
+
+        .purpose-box {
+            background: rgba(6, 182, 212, 0.05);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            padding: 2rem;
+            border-radius: 16px;
+            max-width: 800px;
+            margin: 0 auto 4rem auto;
+            text-align: left;
+            position: relative;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+        
+        .purpose-box:hover {
+            transform: translateY(-2px);
+            background: rgba(6, 182, 212, 0.08);
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.1);
+        }
+
+        .purpose-title {
+            color: var(--accent-color);
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .purpose-text {
+            color: #d1d5db;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .purpose-text strong {
+            color: #fff;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            padding: 1.25rem 3.5rem;
+            border-radius: 99px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.4);
+            letter-spacing: 0.5px;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 50px rgba(6, 182, 212, 0.7);
+            background: #0891b2;
+        }
+
+        .btn-outline {
+            display: inline-block;
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+            padding: 0.5rem 1.5rem;
+            border-radius: 99px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        @keyframes pulse-glow {
+            0% { filter: drop-shadow(0 0 10px rgba(6,182,212,0.2)); }
+            100% { filter: drop-shadow(0 0 35px rgba(6,182,212,0.6)); }
+        }
+
+        .features-grid {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding-bottom: 4rem;
+        }
+
+        .feature-card {
+            background: rgba(15, 15, 15, 0.6);
+            border: 1px solid rgba(6, 182, 212, 0.15);
+            padding: 2rem 1.5rem;
+            border-radius: 16px;
+            width: 280px;
+            text-align: left;
+            backdrop-filter: blur(12px);
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(6, 182, 212, 0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .feature-icon {
+            color: var(--accent-color);
+            margin-bottom: 1.25rem;
+            background: rgba(6, 182, 212, 0.1);
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        /* Demo credentials box */
+        .demo-credentials {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            background: rgba(255,255,255,0.05);
+            padding: 8px 16px;
+            border-radius: 99px;
+            border: 1px solid var(--glass-border);
+            display: inline-flex;
+            gap: 15px;
+        }
+        .demo-credentials span {
+            color: var(--accent-color);
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    
+    <nav class="welcome-nav">
+        <div class="welcome-logo">Planix</div>
+        <a href="/login.html" class="btn-outline">Sign In</a>
+    </nav>
+
+    <div class="main-section animate-fade-in" style="animation-duration: 1.2s;">
+        <h1 class="hero-title">Planix</h1>
+        <p class="hero-subtitle">Most to-do lists are dumpsters for your anxiety. Planix is different. It is an intelligent, psychology-driven engine designed to dynamically hack your workflow.</p>
+        
+        <!-- App Purpose Section -->
+        <div class="purpose-box">
+            <h3 class="purpose-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                The Philosophy
+            </h3>
+            <p class="purpose-text">
+                Traditional task managers assume you operate at 100% capacity all the time. <strong>We know you don't.</strong> 
+                <br><br>
+                Planix bridges the gap between raw ambition and human fatigue by asking you how you feel, evaluating the difficulty and urgency of your tasks, and serving you exactly what you need to do next. When you are <strong>energetic</strong>, we push your hardest deadlines. When you are <strong>stressed or tired</strong>, we pull out simple, low-brainpower tasks to keep your momentum alive without causing burnout.
+            </p>
+        </div>
+
+        <a href="/login.html" class="cta-btn">Experience Planix</a>
+
+        <div class="demo-credentials">
+            <div>Sample user pre-loaded! Try:</div>
+            <div>Username: <span>DemoUser</span></div>
+            <div>Password: <span>password</span></div>
+        </div>
+
+    </div>
+
+    <!-- Features Bottom -->
+    <div class="features-grid animate-fade-in" style="animation-duration: 1.5s;">
+        <div class="feature-card">
+            <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
+            <h3>Pomodoro Immersive</h3>
+            <p>A built-in zero-distraction focus module designed to lock you into deep work intervals and strictly force mental resets.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></div>
+            <h3>Emotional Intelligence</h3>
+            <p>Stop guessing what to do next. Select your real-time mood and let Planix algorithmically dictate your optimal next step.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
+            <h3>Auto-Timeline Scheduler</h3>
+            <p>Hit one button to let Planix organize your chaos. It instantly generates a sequential timeline of tasks and breaks for your day.</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initTheme } from '/src/shared.js';
+        initTheme();
+        
+        // Soft redirect rule for logged-in users who land here unintentionally
+        // If they click 'Sign out', they shouldn't instantly route back. 
+        // We handle authentication routing formally in shared.js anyway.
+    </script>
+</body>
+</html>
