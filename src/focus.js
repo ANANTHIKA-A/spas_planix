@@ -1,4 +1,4 @@
-import { initApp } from './shared.js';
+import { initApp, API_BASE_URL } from './shared.js';
 
 // Setup basic requirements (Theme, Auth)
 initApp();
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnFetchGuided.addEventListener('click', async () => {
             try {
                 const user = localStorage.getItem('spas_user') || 'default_user';
-                const res = await fetch(`http://localhost:5000/api/intelligence/recommendation/next?userId=${user}`);
+                const res = await fetch(`${API_BASE_URL}/api/intelligence/recommendation/next?userId=${user}`);
                 const data = await res.json();
                 
                 if (data && data.recommendation) {
@@ -209,12 +209,12 @@ document.addEventListener('DOMContentLoaded', () => {
              if (!activeGuidedTask) return;
              try {
                   const user = localStorage.getItem('spas_user') || 'default_user';
-                  const tRes = await fetch(`http://localhost:5000/api/tasks?userId=${user}`);
+                  const tRes = await fetch(`${API_BASE_URL}/api/tasks?userId=${user}`);
                   const allTasks = await tRes.json();
                   const targetList = allTasks.filter(t => t.id === activeGuidedTask.id);
                   if (targetList.length) {
                       const updatedTask = { ...targetList[0], status: 'completed', completedAt: new Date().toISOString() };
-                      await fetch(`http://localhost:5000/api/tasks/${activeGuidedTask.id}?userId=${user}`, {
+                      await fetch(`${API_BASE_URL}/api/tasks/${activeGuidedTask.id}?userId=${user}`, {
                           method: 'PUT', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(updatedTask)
                       });
                       showNotification('Success', 'Guided task marked completed!');
@@ -239,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
              if (task && task.difficulty === 'hard') intensity = 8;
              if (task && task.difficulty === 'easy') intensity = 3;
 
-             await fetch('http://localhost:5000/api/intelligence/fatigue/ping', {
+             await fetch(`${API_BASE_URL}/api/intelligence/fatigue/ping`, {
                  method: 'POST',
                  headers: { 'Content-Type': 'application/json' },
                  body: JSON.stringify({ userId: user, activeDuration: duration, effortIntensity: intensity })

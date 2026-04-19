@@ -1,4 +1,6 @@
 // Theme management
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 export function initTheme() {
   const savedTheme = localStorage.getItem('theme');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -72,7 +74,7 @@ export async function getUserProfile() {
   const currentUser = getCurrentUser();
   if (!currentUser || currentUser === 'default_user') return null;
   try {
-    const res = await fetch(`http://localhost:5000/api/auth/${currentUser}`);
+    const res = await fetch(`${API_BASE_URL}/api/auth/${currentUser}`);
     if (!res.ok) throw new Error('Failed to fetch profile');
     return await res.json();
   } catch (err) {
@@ -85,7 +87,7 @@ export async function updateUserXP(xpToAdd, dateStr) {
   const currentUser = getCurrentUser();
   if (!currentUser || currentUser === 'default_user') return null;
   try {
-    const res = await fetch(`http://localhost:5000/api/auth/${currentUser}/xp`, {
+    const res = await fetch(`${API_BASE_URL}/api/auth/${currentUser}/xp`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ xpToAdd, dateStr })
@@ -103,7 +105,7 @@ export async function getTasks() {
   if (!currentUser || currentUser === 'default_user') return [];
   
   try {
-    const res = await fetch(`http://localhost:5000/api/tasks?userId=${currentUser}`);
+    const res = await fetch(`${API_BASE_URL}/api/tasks?userId=${currentUser}`);
     if (!res.ok) throw new Error('Failed to fetch tasks');
     
     const tasks = await res.json();
@@ -142,7 +144,7 @@ export async function saveTasks(tasks) {
   if (!currentUser || currentUser === 'default_user') return;
   
   try {
-    await fetch(`http://localhost:5000/api/tasks/bulk?userId=${currentUser}`, {
+    await fetch(`${API_BASE_URL}/api/tasks/bulk?userId=${currentUser}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(tasks)

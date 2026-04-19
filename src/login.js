@@ -1,4 +1,4 @@
-import { initApp } from './shared.js';
+import { initApp, API_BASE_URL } from './shared.js';
 
 initApp();
 
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const submitOriginalText = submitBtn.textContent;
                 submitBtn.textContent = 'Please wait...';
                 
-                const res = await fetch('http://localhost:5000/api/auth/login', {
+                const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, password })

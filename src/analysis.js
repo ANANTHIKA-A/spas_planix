@@ -1,4 +1,4 @@
-import { initApp, getTasks, saveTasks, calculateTimeRemaining } from './shared.js';
+import { initApp, getTasks, saveTasks, calculateTimeRemaining, API_BASE_URL } from './shared.js';
 
 initApp();
 
@@ -189,7 +189,7 @@ async function initAnalysisPage() {
         }
         // Fetch and Render Predictive Energy Curve
         const user = localStorage.getItem('spas_user') || 'default_user';
-        fetch(`http://localhost:5000/api/intelligence/analytics/predictive?userId=${user}`)
+        fetch(`${API_BASE_URL}/api/intelligence/analytics/predictive?userId=${user}`)
             .then(res => res.json())
             .then(data => {
                 const ctx = document.getElementById('energyProdChart');

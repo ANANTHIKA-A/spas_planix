@@ -1,4 +1,4 @@
-import { initApp, getTasks, saveTasks, calculateTimeRemaining, getCurrentUser, getUserProfile, updateUserXP } from './shared.js';
+import { initApp, getTasks, saveTasks, calculateTimeRemaining, getCurrentUser, getUserProfile, updateUserXP, API_BASE_URL } from './shared.js';
 
 // Setup basic requirements
 initApp();
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         try {
             const currentUser = getCurrentUser();
-            const res = await fetch(`http://localhost:5000/api/intelligence/recommendation/next?userId=${currentUser}`);
+            const res = await fetch(`${API_BASE_URL}/api/intelligence/recommendation/next?userId=${currentUser}`);
             if (!res.ok) throw new Error('Failed to fetch recommendation');
             
             const data = await res.json();

@@ -1,4 +1,4 @@
-import { initApp, getTasks, getCurrentUser } from './shared.js';
+import { initApp, getTasks, getCurrentUser, API_BASE_URL } from './shared.js';
 
 initApp();
 
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // 2. Fetch similarity clusters from our intelligence backend
-        const res = await fetch(`http://localhost:5000/api/intelligence/similarity?userId=${user}`);
+        const res = await fetch(`${API_BASE_URL}/api/intelligence/similarity?userId=${user}`);
         let similarityData = null;
         if (res.ok) {
             similarityData = await res.json();
