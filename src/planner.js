@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Quick link to Focus Timer
     if (startFocusBtn) {
         startFocusBtn.addEventListener('click', () => {
-            window.location.href = '/focus.html';
+            window.location.href = '/focus';
         });
     }
 

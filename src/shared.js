@@ -41,9 +41,9 @@ export function checkAuth() {
   const isIndexPage = path === '/' || path.includes('index');
   
   if (!isLoggedIn && !isLoginPage && !isIndexPage) {
-    window.location.href = '/login.html';
+    window.location.href = '/login';
   } else if (isLoggedIn && (isLoginPage || isIndexPage)) {
-    window.location.href = '/dashboard.html';
+    window.location.href = '/dashboard';
   }
 
   // Setup logout listener if we are not on login page
@@ -54,7 +54,7 @@ export function checkAuth() {
         e.preventDefault();
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('spas_user');
-        window.location.href = '/login.html';
+        window.location.href = '/login';
       });
     }
   }
