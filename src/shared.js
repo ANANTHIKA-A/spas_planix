@@ -36,8 +36,9 @@ export function initTheme() {
 // Authentication check
 export function checkAuth() {
   const isLoggedIn = localStorage.getItem('isLoggedIn');
-  const isLoginPage = window.location.pathname.includes('login.html');
-  const isIndexPage = window.location.pathname === '/' || window.location.pathname.includes('index.html');
+  const path = window.location.pathname;
+  const isLoginPage = path.includes('login');
+  const isIndexPage = path === '/' || path.includes('index');
   
   if (!isLoggedIn && !isLoginPage && !isIndexPage) {
     window.location.href = '/login.html';
